@@ -1,0 +1,89 @@
+region: "ap-singapore"  # 服务器所在的区域
+project_id: 1119644  # RO 项目 ID
+internet_service: 1  # 是否开启公网服务（1 表示开启）
+engine_version: "5.7"  # 数据库引擎版本
+charge_type: "PREPAID"  # 计费类型：预付费（包年包月）
+prepaid_period: 36  # 预付费时长（单位：月）
+root_password: "xxxxx"  # 数据库 root 用户密码
+cpu: 4  # CPU 核数
+mem_size: 8000  # 内存大小（单位：MB）
+volume_size: 200  # 存储空间大小（单位：GB）
+vpc_id: "vpc-xx"  # VPC ID
+subnet_id: "subnet-xxx"  # 私有子网 ID
+security_groups:
+  - "sg-xxx"  # 安全组 ID
+  - "sg-xxx"
+instance_name: "my-database-instance"  # 数据库实例名称
+backup_retention: 15  # 备份保留天数
+tag_list:
+  - key: ""  # 标签键
+  - value: ""  # 标签值
+
+parameters:  # 数据库参数配置
+  character_set_server: "utf8mb4"  # 服务器默认字符集
+  max_connections: "100000"  # 最大连接数
+  time_zone: "+07:00"  # 数据库时区
+
+accounts:  # 数据库用户账号配置
+  - name: "exporter"  # 账号名称
+    password: "xxxxx"  # 账号密码
+    description: "monitor"  # 账号描述
+    max_user_connections: 10  # 最大并发连接数
+    privileges:  # 账号权限
+      - "PROCESS"
+      - "REPLICATION CLIENT"
+      - "LOCK TABLES"
+      - "SELECT"
+      - "SHOW DATABASES"
+
+  - name: "xxx"
+    password: "xxxxx"
+    description: "xxx"
+    max_user_connections: 10
+    privileges:
+      - "PROCESS"
+      - "REPLICATION CLIENT"
+      - "LOCK TABLES"
+      - "SELECT"
+      - "SHOW DATABASES"
+
+  - name: "xxxx"
+    password: "xxxxxx"
+    description: "xxxxx"
+    max_user_connections: 30
+    privileges:
+      - "PROCESS"
+      - "REPLICATION CLIENT"
+      - "LOCK TABLES"
+      - "SELECT"
+      - "SHOW DATABASES"
+
+  - name: "xxxx"
+    password: "xxx"
+    description: "xxxx"
+    max_user_connections: 10240
+    privileges:
+      - "ALTER"
+      - "ALTER ROUTINE"
+      - "CREATE"
+      - "CREATE ROUTINE"
+      - "CREATE TEMPORARY TABLES"
+      - "CREATE USER"
+      - "CREATE VIEW"
+      - "DELETE"
+      - "DROP"
+      - "EVENT"
+      - "EXECUTE"
+      - "INDEX"
+      - "INSERT"
+      - "LOCK TABLES"
+      - "PROCESS"
+      - "REFERENCES"
+      - "RELOAD"
+      - "REPLICATION CLIENT"
+      - "REPLICATION SLAVE"
+      - "SELECT"
+      - "SHOW DATABASES"
+      - "SHOW VIEW"
+      - "TRIGGER"
+      - "UPDATE"

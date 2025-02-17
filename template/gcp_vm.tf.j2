@@ -1,0 +1,72 @@
+
+provider "google" {
+  project = "{{ project }}"
+}
+
+resource "google_compute_instance" "instance" {
+  count        = {{ instance_count }}
+  name         = "{{ instance_name }}"
+  project      = "{{ project }}"
+  zone         = "{{ zone }}"
+  machine_type = "{{ machine_type }}"
+  min_cpu_platform = "{{ min_cpu_platform }}"
+  tags = {{ tags | tojson }}
+
+  boot_disk {
+    initialize_params {
+      image = "{{ boot_disk.image }}"
+      size  = {{ boot_disk.size }}
+      type  = "{{ boot_disk.type }}"
+    }
+    auto_delete = true
+  }
+
+  network_interface {
+    network            = "{{ network.network }}"
+    subnetwork_project = "{{ network.subnetwork_project }}"
+    subnetwork         = "{{ network.subnetwork }}"
+    stack_type         = "{{ network.stack_type }}"
+    access_config {
+      nat_ip = "{{ ipv4 }}"
+    }
+    ipv6_access_config {
+      network_tier  = "PREMIUM"
+    }
+  }
+
+  service_account {
+    email  = "{{ service_account.email }}"
+    scopes = {{ service_account.scopes | tojson }}
+  }
+
+  scheduling {
+    automatic_restart   = {{ scheduling.automatic_restart }}
+    on_host_maintenance = "{{ scheduling.on_host_maintenance }}"
+    preemptible         = {{ scheduling.preemptible }}
+  }
+
+  shielded_instance_config {
+    enable_secure_boot          = {{ shielded_instance_config.enable_secure_boot }}
+    enable_vtpm                 = {{ shielded_instance_config.enable_vtpm }}
+    enable_integrity_monitoring = {{ shielded_instance_config.enable_integrity_monitoring }}
+  }
+
+  labels = {
+    {% for key, value in labels.items() %}
+    "{{ key }}" = "{{ value }}"
+    {% endfor %}
+  }
+
+  reservation_affinity {
+    type = "{{ reservation_affinity.type }}"
+  }
+}
+
+output "private_ip" {
+  value = google_compute_instance.instance[*].network_interface.0.network_ip
+}
+
+output "public_ipv6_ip" {
+  value = google_compute_instance.instance[*].network_interface.0.ipv6_access_config.0.external_ipv6
+}
+

@@ -1,0 +1,51 @@
+project: "ro-lna"  # GCP 项目 ID
+instance_count: 1  # 需要创建的实例数量
+instance_name: "example-instance"  # 实例名称
+machine_type: "e2-medium"  # 机器类型
+min_cpu_platform: "Intel Ice Lake"  # 最小 CPU 平台要求
+zone: "us-central1-a"  # 实例所在的 GCP 可用区
+ipv4: ""  # 绑定的 IPv4 地址（留空表示动态分配）
+ipv6: ""  # 绑定的 IPv6 地址（留空表示动态分配）
+
+tags:  # 网络标签（用于防火墙规则等）
+  - "allow-console"
+  - "allow-sh"
+  - "allow-gs-ipv4"
+  - "allow-gs-ipv6"
+
+boot_disk:  # 启动磁盘配置
+  image: ""  # 磁盘镜像
+  size: 1000  # 磁盘大小（GB）
+  type: "pd-balanced"  # 磁盘类型
+
+network:  # 网络配置
+  network: ""  # VPC 网络
+  subnetwork_project: ""  # 所属子网的项目
+  subnetwork: ""  # 子网 ID
+  stack_type: ""  # 网络协议栈类型（同时支持 IPv4 和 IPv6）
+
+service_account:  # 绑定的服务账号
+  email: ""  # 服务账号邮箱
+  scopes:  # 服务账号的权限范围
+    - "https://www.googleapis.com/auth/devstorage.read_only"  # 只读访问 GCS
+    - "https://www.googleapis.com/auth/logging.write"  # 允许写入日志
+    - "https://www.googleapis.com/auth/monitoring.write"  # 允许写入监控数据
+    - "https://www.googleapis.com/auth/servicecontrol"  # 访问 Service Control API
+    - "https://www.googleapis.com/auth/service.management.readonly"  # 只读访问服务管理
+    - "https://www.googleapis.com/auth/trace.append"  # 允许写入 Trace 数据
+
+scheduling:  # 调度策略
+  automatic_restart: true  # 允许实例自动重启
+  on_host_maintenance: "MIGRATE"  # 维护时迁移实例
+  preemptible: false  # 是否使用抢占式实例（false 表示普通实例）
+
+shielded_instance_config:  # Shielded VM 配置
+  enable_secure_boot: false  # 是否启用安全启动
+  enable_vtpm: true  # 是否启用 vTPM
+  enable_integrity_monitoring: true  # 是否启用完整性监控
+
+labels:  # 资源标签
+  goog-ec-src: "vm_add-gcloud"  # Google Compute Engine 资源标签
+
+reservation_affinity:  # 预留资源策略
+  type: "ANY_RESERVATION"  # 允许使用任何预留资源

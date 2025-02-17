@@ -1,0 +1,35 @@
+cvm:
+  region: "ap-singapore"  # 服务器所在的区域
+  project_id: 1119644  # RO 项目 ID
+  instance:
+    name: "instance_name"  # 服务器实例名称
+    hostname: "instance_name"  # 主机名，通常与实例名称保持一致
+    availability_zone: "ap-singapore-3"  # 可用区
+    image_id: "img-xxxxx"  # 镜像 ID，用于初始化实例
+    instance_type: "S5.16XLARGE256"  # 服务器机型
+    charge_type: "PREPAID"  # 计费类型：预付费（包年包月）
+    charge_period: 1  # 预付费时长（单位：月）
+    auto_renew: "NOTIFY_AND_AUTO_RENEW"  # 自动续费策略，默认通知并自动续费
+    system_disk:
+      type: "CLOUD_PREMIUM"  # 系统盘类型
+      size: 1024  # 系统盘大小（单位：GB）
+    security_groups:
+      - "sg-xxxx"  # 安全组 ID
+      - "sg-xxxx"
+      - "sg-xxxx"
+      - "sg-xxxx"
+    network:
+      vpc_id: "vpc-xxxx"  # VPC ID
+      subnet_id: "subnet-xxxx"  # 私有子网 ID
+    tags:
+      - key: xxxx  # 标签键
+        value: xxxx  # 标签值
+    count: 1  # 创建实例的数量
+
+eip:
+  name: "eip_instance_name"  # EIP 名称
+  bandwidth: 2000  # 外网带宽（Mbps）
+  bandwidth_package_id: "bwp-xxxx"  # 绑定的带宽包 ID
+  charge_type: "BANDWIDTH_PACKAGE"  # 计费方式：按带宽包计费
+  type: "EIP"  # 弹性公网 IP 类型
+  associate_instance: true  # 是否绑定到实例

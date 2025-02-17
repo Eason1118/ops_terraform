@@ -1,0 +1,74 @@
+terraform {
+  required_providers {
+    tencentcloud = {
+      source  = "tencentcloudstack/tencentcloud"
+      version = ">=1.81.20"
+    }
+  }
+}
+
+provider "tencentcloud" {
+  region = "{{ region }}"
+}
+
+resource "tencentcloud_mysql_instance" "db" {
+  project_id        = {{ project_id }}
+  internet_service  = {{ internet_service }}
+  engine_version    = "{{ engine_version }}"
+  charge_type       = "{{ charge_type }}"
+  prepaid_period    = {{ prepaid_period }}
+  root_password     = "{{ root_password }}"
+  cpu               = {{ cpu }}
+  mem_size          = {{ mem_size }}
+  volume_size       = {{ volume_size }}
+  vpc_id            = "{{ vpc_id }}"
+  subnet_id         = "{{ subnet_id }}"
+  security_groups   = {{ security_groups | tojson }}
+
+{% if tag_list %}
+  tags = {
+  {% for item in tag_list %}
+    "{{ item.key }}" = "{{ item.value }}"
+  {% endfor %}
+  }
+{% endfi %}
+
+
+  parameters = {
+  {% for key, value in parameters.items() %}
+    "{{ key }}" = "{{ value }}"
+  {% endfor %}
+  }
+}
+
+{% for account in accounts %}
+resource "tencentcloud_mysql_account" "{{ account.name }}" {
+  mysql_id             = tencentcloud_mysql_instance.db.id
+  name                 = "{{ account.name }}"
+  password             = "{{ account.password }}"
+  description          = "{{ account.description }}"
+  max_user_connections = {{ account.max_user_connections }}
+}
+
+resource "tencentcloud_mysql_privilege" "{{ account.name }}" {
+  mysql_id     = tencentcloud_mysql_instance.db.id
+  account_name = tencentcloud_mysql_account.{{ account.name }}.name
+  global       = {{ account.privileges | tojson }}
+}
+{% endfor %}
+
+resource "tencentcloud_mysql_backup_policy" "db_policy" {
+  mysql_id         = tencentcloud_mysql_instance.db.id
+  retention_period = {{ backup_retention }}
+  backup_model     = "physical"
+}
+
+output "mysql_private_ip" {
+  value       = tencentcloud_mysql_instance.db.intranet_ip
+  description = "The created IPv4 mysql_private_ip"
+}
+
+output "mysql_public_ip" {
+  value       = tencentcloud_mysql_instance.db.internet_host
+  description = "The created mysql_public_ip"
+}

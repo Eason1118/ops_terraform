@@ -1,0 +1,68 @@
+terraform {
+  required_providers {
+    tencentcloud = {
+      source = "tencentcloudstack/tencentcloud"
+      version = ">=1.81.20"
+    }
+  }
+}
+
+provider "tencentcloud" {
+  region = "{{ cvm.region }}"
+}
+
+resource "tencentcloud_instance" "vm" {
+  project_id        = {{ cvm.project_id }}
+  instance_name     = "{{ cvm.instance.name }}"
+  hostname          = "{{ cvm.instance.hostname }}"
+  availability_zone = "{{ cvm.instance.availability_zone }}"
+  image_id          = "{{ cvm.instance.image_id }}"
+  instance_type     = "{{ cvm.instance.instance_type }}"
+  instance_charge_type = "{{ cvm.instance.charge_type }}"
+  instance_charge_type_prepaid_period = {{ cvm.instance.charge_period }}
+  instance_charge_type_prepaid_renew_flag = "{{ cvm.instance.auto_renew }}"
+  system_disk_type  = "{{ cvm.instance.system_disk.type }}"
+  system_disk_size  = {{ cvm.instance.system_disk.size }}
+  orderly_security_groups = {{ cvm.instance.security_groups | tojson }}
+  vpc_id            = "{{ cvm.instance.network.vpc_id }}"
+  subnet_id         = "{{ cvm.instance.network.subnet_id }}"
+  tags = {
+    {% for key, value in cvm.instance.tags.items() %}
+    "{{ key }}" = "{{ value }}"
+    {% endfor %}
+  {% for item in cvm.instance.tags %}
+    "{{ item.key }}" = "{{ item.value }}"
+  {% endfor %}
+  }
+  count = {{ cvm.instance.count }}
+}
+
+resource "tencentcloud_eip" "ipv4_address" {
+  name                       = "{{ eip.name }}"
+  internet_max_bandwidth_out = {{ eip.bandwidth }}
+  bandwidth_package_id       = "{{ eip.bandwidth_package_id }}"
+  internet_charge_type       = "{{ eip.charge_type }}"
+  type                       = "{{ eip.type }}"
+}
+
+{% if eip.associate_instance %}
+resource "tencentcloud_eip_association" "ipv4_address_association" {
+  eip_id      = tencentcloud_eip.ipv4_address.id
+  instance_id = tencentcloud_instance.vm.0.id
+}
+{% endif %}
+
+output "ipv4_private_ip" {
+  value       = tencentcloud_instance.vm.0.private_ip
+  description = "The created IPv4 private_ip address"
+}
+
+output "ipv4_public_ip" {
+  value       = tencentcloud_eip.ipv4_address.public_ip
+  description = "The created IPv4 public_ip address"
+}
+
+output "vm_instance_id" {
+  value       = tencentcloud_instance.vm.0.id
+  description = "The created VM instance id"
+}
