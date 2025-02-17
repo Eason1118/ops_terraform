@@ -7,17 +7,24 @@
 
 ## 目录结构
 ```
-ops_terraform/
-├── README.md            # 项目说明文档
-├── render.py            # 渲染 Jinja2 模板的 Python 脚本
-├── template/            # 存放 Jinja2 模板文件
-│   ├── gcp_vm.tf.j2     # GCP 虚拟机 Terraform 配置模板
-│   ├── tx_db.tf.j2      # 腾讯云数据库 Terraform 配置模板
-│   └── tx_vm.tf.j2      # 腾讯云虚拟机 Terraform 配置模板
-└── values/              # 存放 YAML 配置文件
-    ├── gcp_vm.yaml      # GCP 虚拟机参数文件
-    ├── tx_db.yaml       # 腾讯云数据库参数文件
-    └── tx_vm.yaml       # 腾讯云虚拟机参数文件
+ops_terraform/                  # 项目根目录
+├── README.md                   # 项目文档，包含使用说明
+├── render.py                   # 渲染脚本，用于将 YAML 配置转换为 Terraform 配置
+├── template/                   # 存放 Jinja2 模板文件
+│   ├── gcp/                    # GCP 相关模板
+│   │   └── vm.tf.j2            # GCP 虚拟机 Terraform 模板
+│   ├── tencent/                # 腾讯云相关模板
+│   │   ├── db.tf.j2            # 腾讯云数据库 Terraform 模板
+│   │   └── vm.tf.j2            # 腾讯云虚拟机 Terraform 模板
+│   └── vol/                    # 预留目录，可用于存放存储卷相关模板
+└── values/                     # 存放 YAML 配置文件
+    ├── gcp/                    # GCP 相关配置
+    │   └── gcp_vm.yaml         # GCP 虚拟机的 YAML 配置
+    ├── tencent/                # 腾讯云相关配置
+    │   ├── db.yaml             # 腾讯云数据库的 YAML 配置
+    │   └── vm.yaml             # 腾讯云虚拟机的 YAML 配置
+    └── vol/                    # 预留目录，可用于存放存储卷相关配置
+
 ```
 
 ## 安装依赖
