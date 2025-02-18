@@ -42,7 +42,13 @@ pip install jinja2 pyyaml
    运行 `render.py` 生成 Terraform 配置文件。
 
    ```bash
-   python render.py -t template/tx_vm.tf.j2 -f <tx-vm-values-1.yaml> -f <tx-vm-values-2.yaml> -o main.tf
+   python render.py \
+     -t template/tx_vm.tf.j2 \
+     -f <tx-vm-values-1.yaml> \
+     -f <tx-vm-values-2.yaml> \
+     -o main.tf \
+     --set cvm.instance.name=my-name \
+     --set eip.internet_max_bandwidth_out=500
    ```
 
 3. **检查生成的 Terraform 配置**  
