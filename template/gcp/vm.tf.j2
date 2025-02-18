@@ -54,8 +54,8 @@ resource "google_compute_instance" "instance" {
   }
 
   labels = {
-    {% for key, value in labels.items() %}
-    "{{ key }}" = "{{ value }}"
+    {% for item in labels %}
+    "{{ item.key }}" = "{{ item.value }}"
     {% endfor %}
   }
 

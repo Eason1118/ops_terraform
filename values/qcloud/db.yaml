@@ -15,9 +15,9 @@ security_groups:
   - "sg-xxx"
 instance_name: "my-database-instance"  # 数据库实例名称
 backup_retention: 15  # 备份保留天数
-tag_list:
+tags:
   - key: ""  # 标签键
-  - value: ""  # 标签值
+    value: ""  # 标签值
 
 parameters:  # 数据库参数配置
   character_set_server: "utf8mb4"  # 服务器默认字符集

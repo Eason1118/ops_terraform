@@ -32,9 +32,9 @@ resource "tencentcloud_mysql_instance" "db" {
   subnet_id         = "{{ subnet_id }}"
   security_groups   = {{ security_groups | tojson }}
 
-{% if tag_list %}
+{% if tags %}
   tags = {
-  {% for item in tag_list %}
+  {% for item in tags %}
     "{{ item.key }}" = "{{ item.value }}"
   {% endfor %}
   }
