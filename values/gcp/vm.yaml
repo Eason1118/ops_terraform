@@ -45,7 +45,8 @@ shielded_instance_config:  # Shielded VM 配置
   enable_integrity_monitoring: true  # 是否启用完整性监控
 
 labels:  # 资源标签
-  goog-ec-src: "vm_add-gcloud"  # Google Compute Engine 资源标签
+  - key: goog-ec-src
+    value: "vm_add-gcloud"  # Google Compute Engine 资源标签
 
 reservation_affinity:  # 预留资源策略
   type: "ANY_RESERVATION"  # 允许使用任何预留资源

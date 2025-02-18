@@ -29,15 +29,12 @@ resource "tencentcloud_instance" "vm" {
   system_disk_type  = "{{ cvm.instance.system_disk.type }}"
   system_disk_size  = {{ cvm.instance.system_disk.size }}
   orderly_security_groups = {{ cvm.instance.security_groups | tojson }}
-  vpc_id            = "{{ cvm.instance.network.vpc_id }}"
-  subnet_id         = "{{ cvm.instance.network.subnet_id }}"
+  vpc_id            = "{{ cvm.instance.vpc_id }}"
+  subnet_id         = "{{ cvm.instance.subnet_id }}"
   tags = {
-    {% for key, value in cvm.instance.tags.items() %}
-    "{{ key }}" = "{{ value }}"
-    {% endfor %}
-  {% for item in cvm.instance.tags %}
+    {% for item in cvm.instance.tags %}
     "{{ item.key }}" = "{{ item.value }}"
-  {% endfor %}
+    {% endfor %}
   }
   count = {{ cvm.instance.count }}
 }
