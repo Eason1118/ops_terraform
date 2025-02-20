@@ -31,7 +31,7 @@ ops_terraform/                  # 项目根目录
 本项目依赖 Python 及 Jinja2 库，请确保你的环境已安装。
 
 ```bash
-pip install jinja2 pyyaml
+pip install -r requirements.txt
 ```
 
 ## 使用方法

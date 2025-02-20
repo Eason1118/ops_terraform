@@ -1,0 +1,9 @@
+# 白名单模式
+*
+
+# 只允许下面的文件进入 docker
+!template/
+!requirements.txt
+!render.py
+!Makefile
+!LICENSE

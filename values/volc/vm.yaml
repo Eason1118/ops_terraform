@@ -1,0 +1,36 @@
+
+instance:
+  # （必填）ECS 实例的名称。
+  name: "terraform-instance"
+  # （必填）ECS 实例的资源规格。
+  type: "ecs.c3il.2xlarge" # https://www.volcengine.com/docs/6396/70840
+  # （必填）ECS 实例的映像 ID。
+  image_id: "your-image-id"  # Replace with actual image ID
+  # （必填）ECS 实例所属可用区 ID。
+  zone_id: "cn-shanghai-a"
+  # （必填，ForceNew）主网络接口的子网 ID。
+  subnet_id: "your-subnet-id"  # Replace with actual subnet ID
+  # （必填）付费类型
+  charge_type: "PrePaid"
+  # （可选）ECS 实例的周期。仅当 instance_charge_type 为 PrePaid 时有效。单位为月。
+  period: 1
+
+  # （必填）主网络接口的安全组 ID 集。
+  security_group_id: "xxxx"
+
+  # （可选）额外挂载的数据盘
+  data_volumes:
+    - type: "ESSD_PL0" # （必填，ForceNew）卷的类型，值为 ESSD_PL0 或 ESSD_PL1 或 ESSD_PL2 或 ESSD_FlexPL 。
+      size: 100 # （必填，ForceNew）数据卷的大小。数据卷大小的取值范围为 ESSD_PL0: 10~32768、ESSD_FlexPL: 10~32768
+      delete_with_instance: "true" # （可选，ForceNew）实例删除时同时删除存储。
+
+  # （可选）ECS 实例的 ssh 密钥名称。只有修改 image_id 时才能修改此字段。
+  key_pair_name: "xxxx"
+
+  # （可选） 标签。
+  tags:
+    - key: "creator"
+      value: "terraform"
+    - key: "env"
+      value: "test"
+
